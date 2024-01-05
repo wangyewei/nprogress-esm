@@ -83,15 +83,16 @@ class NProgress {
     if (!NProgress.status) NProgress.set(10)
     const work = () => {
       setTimeout(() => {
-        console.log('before status')
         if (!NProgress.status) return
-        console.log('after status')
         NProgress.trickle()
         work()
       }, NProgress.settings.trickleSpeed)
     }
-    console.log(NProgress.settings.trickle)
     if (NProgress.settings.trickle) work()
+  }
+
+  static done() {
+    NProgress.set(100)
   }
 
   static render(from: Minimum) {
