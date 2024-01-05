@@ -37,9 +37,9 @@ class NProgress {
     const settings = NProgress.settings
     n = clamp<Minimum>(n, settings.minimum, 100)
 
-    NProgress.status = n === 100 ? null : NProgress.status
+    NProgress.status = n === 100 ? null : n
 
-    const progress = NProgress.render(0)!
+    const progress = NProgress.render(+(NProgress.status || 0) as Minimum)!
     const bar = progress?.querySelector<HTMLElement>(
       NProgress.settings.barSelector
     )!
@@ -55,7 +55,7 @@ class NProgress {
 
       css(bar, this.barPositionCSS(n, speed, ease))
 
-      if (n === 1) {
+      if (n === 100) {
         // Fade out
         css(progress, {
           transition: 'none',
@@ -80,17 +80,18 @@ class NProgress {
   }
 
   static start() {
-    if (!NProgress.status) NProgress.set(0)
-
+    if (!NProgress.status) NProgress.set(10)
     const work = () => {
       setTimeout(() => {
+        console.log('before status')
         if (!NProgress.status) return
+        console.log('after status')
         NProgress.trickle()
         work()
       }, NProgress.settings.trickleSpeed)
     }
-
-    if (!NProgress.settings.trickle) work()
+    console.log(NProgress.settings.trickle)
+    if (NProgress.settings.trickle) work()
   }
 
   static render(from: Minimum) {
@@ -105,7 +106,8 @@ class NProgress {
     const bar = progress.querySelector<HTMLElement>(
       NProgress.settings.barSelector
     )!
-    const perc = from ? '-100' : toBarPerc(NProgress.status || 0)
+    const perc = from ? toBarPerc(from) : '-100'
+
     const parent = isHTMLElement(NProgress.settings.parent)
       ? NProgress.settings.parent
       : (document.querySelector(NProgress.settings.parent) as HTMLElement)
@@ -132,23 +134,20 @@ class NProgress {
   }
 
   static inc(amount?: number) {
-    console.log('trigger')
     let n: Minimum = +(NProgress.status || 0) as Minimum
-    console.log('inc', n)
-
     if (!n) {
       return NProgress.start()
-    } else if (n > 1) {
+    } else if (n > 100) {
       return
     } else {
       if (typeof amount !== 'number') {
-        if (n >= 0 && n < 0.2) {
+        if (n >= 0 && n < 20) {
           amount = 10
-        } else if (n >= 0.2 && n < 0.5) {
+        } else if (n >= 20 && n < 50) {
           amount = 4
-        } else if (n >= 0.5 && n < 0.8) {
+        } else if (n >= 50 && n < 80) {
           amount = 2
-        } else if (n >= 0.8 && n < 0.99) {
+        } else if (n >= 80 && n < 100) {
           amount = 1
         } else {
           amount = 0
@@ -156,7 +155,6 @@ class NProgress {
       }
 
       n = clamp(n + amount, 0, 90)
-      console.log(n)
       return NProgress.set(n)
     }
   }
