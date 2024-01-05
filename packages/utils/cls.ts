@@ -22,7 +22,7 @@ export const hasClass = (element: string | Element, name: string) => {
 
 export const css = (() => {
   const cssPrefixes = ['Webkit', 'O', 'Moz', 'ms']
-  const cssProps = {}
+  const cssProps: Record<string, any> = {}
 
   const getVendorProp = (name: string) => {
     var style = document.body.style
@@ -45,8 +45,8 @@ export const css = (() => {
   }
 
   const applyCss = (element: HTMLElement, prop: string, value: unknown) => {
-    prop = getProp(prop)
-    element.style[prop] = value
+    const styleName = getProp(prop) as keyof CSSStyleDeclaration
+    ;(element.style as any)[styleName] = value
   }
 
   return (element: HTMLElement, properties: Record<string, any>) => {

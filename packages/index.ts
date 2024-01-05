@@ -1,42 +1,18 @@
-import { DightEnum } from './utils/typed'
 import { clamp, toBarPerc } from './utils/calc'
 import { addClass, removeClass, css } from './utils/cls'
 import { isHTMLElement } from './utils/is'
 import { removeElement } from './utils/basic'
 import { queue } from './utils/queue'
-
-type Minimum = DightEnum<101>
-export type NProgressSetting = {
-  minimum: Minimum
-  easing: 'linear' | string
-  positionUsing: string
-  speed: number
-  trickle: boolean
-  trickleSpeed: number
-  showSpinner: boolean
-  barSelector: string
-  spinnerSelector: string
-  parent: string
-  template: string
-}
+import {
+  DEFAULT_SETTINGS,
+  type NProgressSetting,
+  type Minimum,
+} from './settings'
 
 const ELEMENT_ID = 'nprogress'
 
 class NProgress {
-  static settings: NProgressSetting = {
-    minimum: 1,
-    easing: 'linear',
-    positionUsing: '',
-    speed: 200,
-    trickle: true,
-    trickleSpeed: 200,
-    showSpinner: true,
-    barSelector: '[role="bar"]',
-    spinnerSelector: '[role="spinner"]',
-    parent: 'body',
-    template:
-      '<div class="bar" role="bar"><div class="peg"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>',
-  }
+  static settings: NProgressSetting = DEFAULT_SETTINGS
 
   static get isRendered(): boolean {
     return !!document.getElementById(ELEMENT_ID)
@@ -49,9 +25,11 @@ class NProgress {
   static configure(options: Partial<NProgressSetting>) {
     const settings = NProgress.settings
     for (const key in options) {
-      const value = options[key]
-      if (value && Object.prototype.hasOwnProperty.call(options, key))
-        settings[key] = value
+      const k = key as keyof NProgressSetting
+      const value = options[k]
+      if (value && Object.prototype.hasOwnProperty.call(options, key)) {
+        ;(settings[k] as any) = value
+      }
     }
   }
 
@@ -59,7 +37,7 @@ class NProgress {
     const settings = NProgress.settings
     n = clamp<Minimum>(n, settings.minimum, 100)
 
-    NProgress.status = n === 100 ? null : n
+    NProgress.status = n === 100 ? null : NProgress.status
 
     const progress = NProgress.render(0)!
     const bar = progress?.querySelector<HTMLElement>(
@@ -101,6 +79,20 @@ class NProgress {
     })
   }
 
+  static start() {
+    if (!NProgress.status) NProgress.set(0)
+
+    const work = () => {
+      setTimeout(() => {
+        if (!NProgress.status) return
+        NProgress.trickle()
+        work()
+      }, NProgress.settings.trickleSpeed)
+    }
+
+    if (!NProgress.settings.trickle) work()
+  }
+
   static render(from: Minimum) {
     if (NProgress.isRendered) return document.getElementById(ELEMENT_ID)
 
@@ -137,6 +129,36 @@ class NProgress {
 
     parent.append(progress)
     return progress
+  }
+
+  static inc(amount?: number) {
+    console.log('trigger')
+    let n: Minimum = +(NProgress.status || 0) as Minimum
+    console.log('inc', n)
+
+    if (!n) {
+      return NProgress.start()
+    } else if (n > 1) {
+      return
+    } else {
+      if (typeof amount !== 'number') {
+        if (n >= 0 && n < 0.2) {
+          amount = 10
+        } else if (n >= 0.2 && n < 0.5) {
+          amount = 4
+        } else if (n >= 0.5 && n < 0.8) {
+          amount = 2
+        } else if (n >= 0.8 && n < 0.99) {
+          amount = 1
+        } else {
+          amount = 0
+        }
+      }
+
+      n = clamp(n + amount, 0, 90)
+      console.log(n)
+      return NProgress.set(n)
+    }
   }
 
   static remove() {
@@ -186,6 +208,10 @@ class NProgress {
     barCSS['transition'] = `all ${speed}ms ${ease}`
 
     return barCSS
+  }
+
+  static trickle() {
+    return NProgress.inc()
   }
 }
 
