@@ -30,7 +30,8 @@
     "build:style": "esno scripts/buildStyle",
     "build": "run-s build:progress build:style",
     "release": "bumpp package.json --commit --push --tag",
-    "test": "vitest"
+    "test": "vitest",
+    "test:coverge": "vitest --coverage"
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^5.1.0",
@@ -40,6 +41,7 @@
     "@rollup/plugin-replace": "^5.0.5",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.10.6",
+    "@vitest/coverage-v8": "^1.1.3",
     "bumpp": "^9.2.1",
     "esbuild": "^0.19.11",
     "esno": "^4.0.0",

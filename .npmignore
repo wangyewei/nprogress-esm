@@ -17,6 +17,9 @@ prettierrc
 scripts/
 playground/
 packages/
+coverage/
+.github/
+tests/
 
 rollup.config.ts
 

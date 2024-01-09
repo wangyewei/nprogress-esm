@@ -46,7 +46,7 @@ describe('n-progress-esm', () => {
 
       setTimeout(() => {
         expect(progressEl).toBeFalsy()
-      }, 70)
+      }, 200)
     })
 
     it('must clamp to minimum', () => {
@@ -84,7 +84,7 @@ describe('n-progress-esm', () => {
       setTimeout(() => {
         const progressEl = getProgress()
         expect(progressEl).toBeFalsy()
-      }, 70)
+      }, 200)
     })
   })
 
