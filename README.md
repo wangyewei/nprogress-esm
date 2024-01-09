@@ -1,15 +1,10 @@
-# nprogress-esm
+<p align="center">
+<img src="https://github.com/wangyewei/nprogress-esm/assets/49926816/515442e2-d0fd-4733-a5ab-e903d0066d0e" height="150">
+</p>
 
-### Introduction
-
-ESM-Friendly NProgress Rewrite with TypeScript.
-
-```shell
-pnpm i nprogress-esm
-```
-
-The usage same as nprogress
-
-### Thanks
-
-> [NProgress](https://github.com/rstacruz/nprogress)
+<h1 align="center">
+  nprogress-esm
+</h1>
+<p align="center">
+Esm-friendly nprogress rewirte with typescript
+<p>
