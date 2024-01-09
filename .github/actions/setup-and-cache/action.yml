@@ -1,64 +1,28 @@
-name: Setup and cache
-description: Setup for node, pnpm and cache for browser testing binaries
-inputs:
-  node-version:
-    required: false
-    description: Node version for setup-node
-    default: 20.x
+name: coverage
 
-runs:
-  using: composite
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
-  steps:
-    - name: Install pnpm
-      uses: pnpm/action-setup@v2
-
-    - name: Set node version to ${{ inputs.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ inputs.node-version }}
-
-    - name: Resolve package versions
-      id: resolve-package-versions
-      shell: bash
-      run: >
-        echo "$(
-          node -e "
-            const fs = require('fs');
-            const lockfile = fs.readFileSync('./pnpm-lock.yaml', 'utf8');
-            const pattern = (name) => new RegExp(name + ':\\\s+specifier: [\\\s\\\w\\\.^]+version: (\\\d+\\\.\\\d+\\\.\\\d+)');
-            const cypressVersion = lockfile.match(pattern('cypress'))[1];
-            const playwrightVersion = lockfile.match(pattern('playwright'))[1];
-            console.log('CYPRESS_VERSION=' + cypressVersion);
-            console.log('PLAYWRIGHT_VERSION=' + playwrightVersion);
-          "
-        )" >> $GITHUB_OUTPUT
-
-    - name: Print versions
-      shell: bash
-      run: echo "${{ toJson(steps.resolve-package-versions.outputs) }}"
-
-    - name: Check resolved package versions
-      shell: bash
-      if: |
-        contains(fromJSON('[null, "", "undefined"]'), steps.resolve-package-versions.outputs.CYPRESS_VERSION) ||
-        contains(fromJSON('[null, "", "undefined"]'), steps.resolve-package-versions.outputs.PLAYWRIGHT_VERSION)
-      run: echo "Failed to resolve package versions. See log above." && exit 1
-
-    - name: Cache Cypress v${{ steps.resolve-package-versions.outputs.CYPRESS_VERSION }}
-      uses: actions/cache@v3
-      id: cypress-cache
-      with:
-        path: ${{ env.CYPRESS_CACHE_FOLDER }}
-        key: ${{ runner.os }}-cypress-${{ steps.resolve-package-versions.outputs.CYPRESS_VERSION }}
-        restore-keys: |
-          ${{ runner.os }}-cypress-
-
-    - name: Cache Playwright v${{ steps.resolve-package-versions.outputs.PLAYWRIGHT_VERSION }}
-      uses: actions/cache@v3
-      id: playwright-cache
-      with:
-        path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
-        key: ${{ runner.os }}-playwright-${{ steps.resolve-package-versions.outputs.PLAYWRIGHT_VERSION }}
-        restore-keys: |
-          ${{ runner.os }}-playwright-
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  CodeCov:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2.1.0
+      - name: Install modules
+        run: pnpm install
+      - name: Run Test Coverage
+        run: cd packages/smarty-ui-vite && pnpm coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          directory: packages/smarty-ui-vite/coverage
+          token: ${{ secrets.CODECOV_TOKEN }}
