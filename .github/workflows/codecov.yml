@@ -13,12 +13,12 @@ env:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  coverage:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
-      - uses: ./actions/setup
+      - uses: ./github/actions/setup
 
       - uses: codecov/codecov-action@v3
 
@@ -26,4 +26,4 @@ jobs:
         run: pnpm i
 
       - name: coverage
-        run: pnpm run test:coverage
+        run: pnpm run test:test
