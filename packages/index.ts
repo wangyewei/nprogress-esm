@@ -80,7 +80,7 @@ class NProgress {
   }
 
   static start() {
-    if (!NProgress.status) NProgress.set(10)
+    if (!NProgress.status) NProgress.set(0)
     const work = () => {
       setTimeout(() => {
         if (!NProgress.status) return

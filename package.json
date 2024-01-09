@@ -29,7 +29,8 @@
     "build:progress": "tsc -p . --noEmit && rollup --config rollup.config.ts --configPlugin esbuild",
     "build:style": "esno scripts/buildStyle",
     "build": "run-s build:progress build:style",
-    "release": "bumpp package.json --commit --push --tag"
+    "release": "bumpp package.json --commit --push --tag",
+    "test": "vitest"
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^5.1.0",
@@ -37,17 +38,19 @@
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-replace": "^5.0.5",
+    "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.10.6",
     "bumpp": "^9.2.1",
     "esbuild": "^0.19.11",
     "esno": "^4.0.0",
     "fast-glob": "^3.3.2",
     "fs-extra": "^11.2.0",
+    "jsdom": "^23.2.0",
     "npm-run-all": "^4.1.5",
     "rollup": "^4.9.2",
     "rollup-plugin-dts": "^6.1.0",
     "rollup-plugin-esbuild": "^6.1.0",
-    "@types/fs-extra": "^11.0.4"
+    "vitest": "^1.1.3"
   },
   "dependencies": {
     "typescript": "^5.3.3"
