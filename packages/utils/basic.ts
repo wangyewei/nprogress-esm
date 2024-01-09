@@ -9,3 +9,5 @@ export const camelCase = (val: string) => {
 export const removeElement = (element: HTMLElement) => {
   element && element.parentNode && element.parentNode.removeChild(element)
 }
+
+export const extend = Object.assign
