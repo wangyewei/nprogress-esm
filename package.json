@@ -31,7 +31,7 @@
     "build": "run-s build:progress build:style",
     "release": "bumpp package.json --commit --push --tag",
     "test": "vitest",
-    "test:coverge": "vitest --coverage"
+    "test:coverage": "vitest --coverage"
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^5.1.0",
