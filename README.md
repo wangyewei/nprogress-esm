@@ -6,7 +6,7 @@
   nprogress-esm
 </h1>
 <p align="center">
-Esm-friendly <a href="https://github.com/rstacruz/nprogress">nprogress</a> rewirte with typescript
+Esm-friendly <a href="https://github.com/rstacruz/nprogress">nprogress</a> rewrite with typescript
 <p>
 
 <p align="center">
