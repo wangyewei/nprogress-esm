@@ -4,7 +4,9 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     coverage: {
-      include: ['**/*.{test,spec}.?(c|m)[jt]s?(x)'],
+      provider: 'istanbul',
+      reporter: ['text', 'json', 'html'],
+      exclude: ['scripts/', 'playground/'],
     },
   },
 })
