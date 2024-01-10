@@ -6,5 +6,55 @@
   nprogress-esm
 </h1>
 <p align="center">
-Esm-friendly nprogress rewirte with typescript
+Esm-friendly <a href="https://github.com/rstacruz/nprogress">nprogress</a> rewirte with typescript
 <p>
+
+<p align="center">
+ <a href="https://codecov.io/gh/wangyewei/nprogress-esm" > 
+   <img src="https://codecov.io/gh/wangyewei/nprogress-esm/graph/badge.svg?token=IMS77BM6N2"/> 
+ </a>
+  <a href="https://www.npmjs.com/package/nprogress-esm"><img src="https://img.shields.io/npm/v/nprogress-esm?color=729B1B&label=npm"></a>
+</p>
+
+<p align="center">
+ <a href="nprogress-esm">Get Started!</a>
+<p>
+
+
+<br />
+<br />
+
+## Installation
+
+Use `npm` to install.
+
+```sh
+$ npm install --save nprogress-esm
+```
+
+## Basic usage
+
+Simply use `.start()` and `.done()` to control the start and end.
+
+```typescript
+import Progress from 'nprogress-esm'
+import 'nprogress-esm/dist//style.css'
+
+Progress.start()
+Progress.done()
+```
+
+You can also use `.set()`.
+
+```typescript
+Progress.set(0) // same as Progress.start()
+Progress.set(100) // same as Progress.end()
+```
+
+## Thanks
+
+> [nprogress](https://github.com/rstacruz/nprogress)
+
+## License
+
+[MIT](./LICENSE) License © 2021-Present [Yev Wang](https://github.com/wangyewei)
