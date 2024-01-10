@@ -3,6 +3,10 @@
   "name": "nprogress-esm",
   "version": "0.1.2",
   "description": "ESM-friendly NProgress Rewrite With Typescript",
+  "homepage": "https://github.com/wangyewei/nprogress-esm",
+  "repository": {
+    "url": "https://github.com/wangyewei/nprogress-esm"
+  },
   "keywords": [
     "nprogress",
     "typescript",
