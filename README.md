@@ -38,7 +38,7 @@ Simply use `.start()` and `.done()` to control the start and end.
 
 ```typescript
 import Progress from 'nprogress-esm'
-import 'nprogress-esm/dist//style.css'
+import 'nprogress-esm/dist/style.css'
 
 Progress.start()
 Progress.done()
