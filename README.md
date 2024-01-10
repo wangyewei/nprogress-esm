@@ -57,4 +57,4 @@ Progress.set(100) // same as Progress.end()
 
 ## License
 
-[MIT](./LICENSE) License © 2021-Present [Yev Wang](https://github.com/wangyewei)
+[MIT](./LICENSE) License © 2024-Present [Yev Wang](https://github.com/wangyewei)
