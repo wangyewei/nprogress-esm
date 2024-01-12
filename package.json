@@ -33,6 +33,8 @@
     "build:progress": "tsc -p . --noEmit && rollup --config rollup.config.ts --configPlugin esbuild",
     "build:style": "esno scripts/buildStyle",
     "build": "run-s build:progress build:style",
+    "build:playground": "esno scripts/buildPlayground",
+    "build:all": "run-s build build:playground",
     "release": "bumpp package.json --commit --push --tag",
     "test": "vitest",
     "test:coverage": "vitest --coverage"
