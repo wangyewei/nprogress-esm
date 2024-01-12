@@ -1,4 +1,4 @@
-import Progress from "../dist/index.js"
+import Progress from "./dist/index.js"
 
 window.addEventListener('DOMContentLoaded', () => {
   const start = document.getElementById('start')
