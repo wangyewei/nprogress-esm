@@ -10,10 +10,10 @@ Esm-friendly <a href="https://github.com/rstacruz/nprogress">nprogress</a> rewri
 <p>
 
 <p align="center">
- <a href="https://codecov.io/gh/wangyewei/nprogress-esm" > 
-   <img src="https://codecov.io/gh/wangyewei/nprogress-esm/graph/badge.svg?token=IMS77BM6N2"/> 
- </a>
+ <a href="https://codecov.io/gh/wangyewei/nprogress-esm"><img src="https://codecov.io/gh/wangyewei/nprogress-esm/graph/badge.svg?token=IMS77BM6N2"/></a>
   <a href="https://www.npmjs.com/package/nprogress-esm"><img src="https://img.shields.io/npm/v/nprogress-esm?color=729B1B&label=npm"></a>
+  <a href="https://www.npmjs.com/package/nprogress-esm"><img src="https://img.shields.io/npm/dt/nprogress-esm.svg"></a>
+ 
 </p>
 
 <p align="center">
