@@ -17,9 +17,8 @@ Esm-friendly <a href="https://github.com/rstacruz/nprogress">nprogress</a> rewri
 </p>
 
 <p align="center">
- <a href="nprogress-esm">Get Started!</a>
+ <a href="https://nprogress-esm.vercel.app">Get Started!</a>
 <p>
-
 
 <br />
 <br />
