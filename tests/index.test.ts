@@ -88,11 +88,40 @@ describe('n-progress-esm', () => {
     })
   })
 
+  describe('inc', () => {
+    it('should render', function () {
+      NProgress.inc();
+      const progressEl = getProgress()
+      expect(progressEl).toBeTruthy()
+    });
+
+    it('should start with minimum', function () {
+      NProgress.inc()
+      equal(NProgress.status, NProgress.settings.minimum)
+    });
+
+    it('should increment', function () {
+      NProgress.start()
+      var start = NProgress.status
+
+      NProgress.inc();
+      expect(NProgress.status! > start!).toBeTruthy()
+    })
+
+    it('should never reach 1.0', function () {
+      for (let i = 0; i < 100; ++i) { NProgress.inc() }
+      expect(NProgress.status! < 100).toBeTruthy()
+    })
+  })
+
   describe('remove', () => {
     it('should be removed from the parent', () => {
-      NProgress.remove()
-      const progressEl = getProgress()
-      expect(progressEl).toBeFalsy()
+      NProgress.start()
+      setTimeout(() => {
+        NProgress.remove()
+        const progressEl = getProgress()
+        expect(progressEl).toBeFalsy()
+      }, 200)
     })
   })
 })
