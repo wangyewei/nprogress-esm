@@ -1,4 +1,4 @@
-import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import NProgress from '../packages'
 import { removeElement, deepClone } from '../packages/utils/basic'
 import { equal } from 'assert'
