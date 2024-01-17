@@ -1,6 +1,6 @@
 import { clamp, toBarPerc } from './utils/calc'
 import { addClass, removeClass, css } from './utils/cls'
-import { isHTMLElement } from './utils/is'
+import { isHTMLElement, isNumber } from './utils/is'
 import { removeElement } from './utils/basic'
 import { queue } from './utils/queue'
 import {
@@ -28,7 +28,7 @@ class NProgress {
       const k = key as keyof NProgressSetting
       const value = options[k]
       if (value && Object.prototype.hasOwnProperty.call(options, key)) {
-        ;(settings[k] as any) = value
+        ; (settings[k] as any) = value
       }
     }
   }
@@ -134,14 +134,14 @@ class NProgress {
     return progress
   }
 
-  static inc(amount?: number) {
+  static inc(amount?: number | string) {
     let n: Minimum = +(NProgress.status || 0) as Minimum
     if (!n) {
       return NProgress.start()
     } else if (n > 100) {
       return
     } else {
-      if (typeof amount !== 'number') {
+      if (!isNumber(amount)) {
         if (n >= 0 && n < 20) {
           amount = 10
         } else if (n >= 20 && n < 50) {
@@ -162,11 +162,11 @@ class NProgress {
 
   static remove() {
     removeClass(document.documentElement, 'nprogress-busy')
-    var parent = isHTMLElement(NProgress.settings.parent)
+    const parent = isHTMLElement(NProgress.settings.parent)
       ? NProgress.settings.parent
       : document.querySelector<HTMLElement>(NProgress.settings.parent)!
     removeClass(parent, 'nprogress-custom-parent')
-    var progress = document.getElementById('nprogress')
+    const progress = document.getElementById('nprogress')
     progress && removeElement(progress)
   }
 
@@ -177,12 +177,12 @@ class NProgress {
       'WebkitTransform' in bodyStyle
         ? 'Webkit'
         : 'MozTransform' in bodyStyle
-        ? 'Moz'
-        : 'msTransform' in bodyStyle
-        ? 'ms'
-        : 'OTransform' in bodyStyle
-        ? 'O'
-        : ''
+          ? 'Moz'
+          : 'msTransform' in bodyStyle
+            ? 'ms'
+            : 'OTransform' in bodyStyle
+              ? 'O'
+              : ''
 
     if (vendorPrefix + 'Perspective' in bodyStyle) {
       return 'translate3d'
