@@ -9,7 +9,6 @@ import type { NProgressSetting } from '../packages/settings'
 
 const getProgress = () => document.getElementById('nprogress')
 const rawSettings: NProgressSetting = deepClone(NProgress.settings)
-
 describe('n-progress-esm', () => {
 
 
