@@ -2,6 +2,7 @@ import type { DightEnum } from './utils/typed'
 
 export type Minimum = DightEnum<101>
 export type NProgressSetting = {
+  primaryColor: string
   minimum: Minimum
   easing: 'linear' | string
   positionUsing: string
@@ -16,6 +17,7 @@ export type NProgressSetting = {
 }
 
 export const DEFAULT_SETTINGS: NProgressSetting = {
+  primaryColor: '#29d',
   minimum: 1,
   easing: 'linear',
   positionUsing: '',

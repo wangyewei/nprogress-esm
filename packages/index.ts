@@ -95,7 +95,7 @@ class NProgress {
     NProgress.set(100)
   }
 
-  static render(from: Minimum) {
+  private static render(from: Minimum) {
     if (NProgress.isRendered) return document.getElementById(ELEMENT_ID)
 
     addClass(document.documentElement, 'nprogress-busy')
@@ -103,6 +103,8 @@ class NProgress {
     const progress = document.createElement('div')
     progress.id = ELEMENT_ID
     progress.innerHTML = NProgress.settings.template
+
+    document.documentElement.style.setProperty('--progress-primary-color', NProgress.settings.primaryColor)
 
     const bar = progress.querySelector<HTMLElement>(
       NProgress.settings.barSelector
@@ -170,7 +172,7 @@ class NProgress {
     progress && removeElement(progress)
   }
 
-  static getPositionCss(): 'translate3d' | 'translate' | 'margin' {
+  private static getPositionCss(): 'translate3d' | 'translate' | 'margin' {
     const bodyStyle = document.body.style
 
     const vendorPrefix =
@@ -193,7 +195,7 @@ class NProgress {
     }
   }
 
-  static barPositionCSS(n: Minimum, speed: number, ease: string) {
+  private static barPositionCSS(n: Minimum, speed: number, ease: string) {
     let barCSS: Record<string, any>
 
     if (NProgress.settings.positionUsing === 'translate3d') {
