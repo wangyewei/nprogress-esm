@@ -1,31 +1,41 @@
 import { clamp, toBarPerc } from './utils/calc'
 import { addClass, removeClass, css } from './utils/cls'
 import { isHTMLElement, isNumber } from './utils/is'
-import { removeElement } from './utils/basic'
+import { removeElement, generateUniqueHash, deepClone } from './utils/basic'
 import { queue } from './utils/queue'
 import {
   DEFAULT_SETTINGS,
-  type NProgressSetting,
+  type ProgressSetting,
   type Minimum,
 } from './settings'
 
-const ELEMENT_ID = 'nprogress'
+const ELEMENT_ID = 'yev-progress'
 
-class NProgress {
-  static settings: NProgressSetting = DEFAULT_SETTINGS
+class ProgressImpl {
 
-  static get isRendered(): boolean {
-    return !!document.getElementById(ELEMENT_ID)
+  settings: ProgressSetting
+  elementId: string
+
+  constructor(settings?: ProgressSetting) {
+    this.settings = settings || deepClone(DEFAULT_SETTINGS)
+    this.elementId = ELEMENT_ID + '-' + generateUniqueHash()
   }
 
-  static status: number | null = null
+  get isRendered(): boolean {
+    return !!document.getElementById(this.elementId)
+  }
 
-  static isStared: boolean = typeof NProgress.status === 'number'
+  get progressId(): string {
+    return this.elementId
+  }
 
-  static configure(options: Partial<NProgressSetting>) {
-    const settings = NProgress.settings
+  status: number | null = null
+  isStared: boolean = typeof this.status === 'number'
+
+  configure(options: Partial<ProgressSetting>) {
+    const settings = this.settings
     for (const key in options) {
-      const k = key as keyof NProgressSetting
+      const k = key as keyof ProgressSetting
       const value = options[k]
       if (value && Object.prototype.hasOwnProperty.call(options, key)) {
         ; (settings[k] as any) = value
@@ -33,24 +43,24 @@ class NProgress {
     }
   }
 
-  static set(n: Minimum) {
-    const settings = NProgress.settings
+  set(n: Minimum) {
+    const settings = this.settings
     n = clamp<Minimum>(n, settings.minimum, 100)
 
-    NProgress.status = n === 100 ? null : n
+    this.status = n === 100 ? null : n
 
-    const progress = NProgress.render(+(NProgress.status || 0) as Minimum)!
+    const progress = this.render(+(this.status || 0) as Minimum)!
     const bar = progress?.querySelector<HTMLElement>(
-      NProgress.settings.barSelector
+      this.settings.barSelector
     )!
-    const speed = NProgress.settings.speed
-    const ease = NProgress.settings.easing
+    const speed = this.settings.speed
+    const ease = this.settings.easing
 
     progress.offsetWidth /* Repaint */
 
     queue((next: Function) => {
-      if (NProgress.settings.positionUsing === '') {
-        NProgress.settings.positionUsing = NProgress.getPositionCss()
+      if (this.settings.positionUsing === '') {
+        this.settings.positionUsing = this.getPositionCss()
       }
 
       css(bar, this.barPositionCSS(n, speed, ease))
@@ -63,13 +73,13 @@ class NProgress {
         })
         progress.offsetWidth /* Repaint */
 
-        setTimeout(function () {
+        setTimeout(() => {
           css(progress, {
             transition: `all ${speed}ms linear`,
             opacity: 0,
           })
-          setTimeout(function () {
-            NProgress.remove()
+          setTimeout(() => {
+            this.remove()
             next()
           }, speed)
         }, speed)
@@ -79,67 +89,68 @@ class NProgress {
     })
   }
 
-  static start() {
-    if (!NProgress.status) NProgress.set(0)
+  start() {
+    if (!this.status) this.set(0)
     const work = () => {
       setTimeout(() => {
-        if (!NProgress.status) return
-        NProgress.trickle()
+        if (!this.status) return
+        this.trickle()
         work()
-      }, NProgress.settings.trickleSpeed)
+      }, this.settings.trickleSpeed)
     }
-    if (NProgress.settings.trickle) work()
+    if (this.settings.trickle) work()
   }
 
-  static done() {
-    NProgress.set(100)
+  done() {
+    this.set(100)
   }
 
-  private static render(from: Minimum) {
-    if (NProgress.isRendered) return document.getElementById(ELEMENT_ID)
+  private render(from: Minimum) {
+    if (this.isRendered) return document.getElementById(this.elementId)
 
-    addClass(document.documentElement, 'nprogress-busy')
+    addClass(document.documentElement, 'yev-progress-busy')
 
     const progress = document.createElement('div')
-    progress.id = ELEMENT_ID
-    progress.innerHTML = NProgress.settings.template
+    progress.id = this.elementId
+    progress.classList.add('yev-progress')
+    progress.innerHTML = this.settings.template
 
-    document.documentElement.style.setProperty('--progress-primary-color', NProgress.settings.primaryColor)
+    document.documentElement.style.setProperty('--progress-primary-color', this.settings.primaryColor)
 
     const bar = progress.querySelector<HTMLElement>(
-      NProgress.settings.barSelector
+      this.settings.barSelector
     )!
     const perc = from ? toBarPerc(from) : '-100'
 
-    const parent = isHTMLElement(NProgress.settings.parent)
-      ? NProgress.settings.parent
-      : (document.querySelector(NProgress.settings.parent) as HTMLElement)
+    const parent = isHTMLElement(this.settings.parent)
+      ? this.settings.parent
+      : (document.querySelector(this.settings.parent) as HTMLElement)
 
     css(bar, {
       transition: 'all 0 linear',
       transform: `translate3d(${perc}%, 0, 0)`,
     })
 
-    if (!NProgress.settings.showSpinner) {
+    if (!this.settings.showSpinner) {
       const spinner = document.querySelector<HTMLElement>(
-        NProgress.settings.spinnerSelector
+        this.settings.spinnerSelector
       )
 
       isHTMLElement(spinner) && removeElement(spinner)
     }
 
     if (parent !== document.body) {
-      addClass(parent, 'nprogress-custom-parent')
+      addClass(parent, 'yev-progress-custom-parent')
     }
 
     parent.append(progress)
     return progress
   }
 
-  static inc(amount?: number | string) {
-    let n: Minimum = +(NProgress.status || 0) as Minimum
+  inc(amount?: number | string) {
+    let n: Minimum = +(this.status || 0) as Minimum
     if (!n) {
-      return NProgress.start()
+      return this.start()
     } else if (n > 100) {
       return
     } else {
@@ -158,21 +169,21 @@ class NProgress {
       }
 
       n = clamp(n + amount, 0, 90)
-      return NProgress.set(n)
+      return this.set(n)
     }
   }
 
-  static remove() {
-    removeClass(document.documentElement, 'nprogress-busy')
-    const parent = isHTMLElement(NProgress.settings.parent)
-      ? NProgress.settings.parent
-      : document.querySelector<HTMLElement>(NProgress.settings.parent)!
-    removeClass(parent, 'nprogress-custom-parent')
-    const progress = document.getElementById('nprogress')
+  remove() {
+    removeClass(document.documentElement, 'yev-progress-busy')
+    const parent = isHTMLElement(this.settings.parent)
+      ? this.settings.parent
+      : document.querySelector<HTMLElement>(this.settings.parent)!
+    removeClass(parent, 'yev-progress-custom-parent')
+    const progress = document.getElementById(this.elementId)
     progress && removeElement(progress)
   }
 
-  private static getPositionCss(): 'translate3d' | 'translate' | 'margin' {
+  private getPositionCss(): 'translate3d' | 'translate' | 'margin' {
     const bodyStyle = document.body.style
 
     const vendorPrefix =
@@ -195,12 +206,12 @@ class NProgress {
     }
   }
 
-  private static barPositionCSS(n: Minimum, speed: number, ease: string) {
+  private barPositionCSS(n: Minimum, speed: number, ease: string) {
     let barCSS: Record<string, any>
 
-    if (NProgress.settings.positionUsing === 'translate3d') {
+    if (this.settings.positionUsing === 'translate3d') {
       barCSS = { transform: `translate3d(${toBarPerc(n)}%, 0, 0)` }
-    } else if (NProgress.settings.positionUsing === 'translate') {
+    } else if (this.settings.positionUsing === 'translate') {
       barCSS = { transform: `translate(${toBarPerc(n)}%, 0)` }
     } else {
       barCSS = { 'margin-left': `${toBarPerc(n)}%` }
@@ -211,9 +222,16 @@ class NProgress {
     return barCSS
   }
 
-  static trickle() {
-    return NProgress.inc()
+  trickle() {
+    return this.inc()
+  }
+
+  create(
+    settings?: ProgressSetting
+  ): ProgressImpl {
+    return new ProgressImpl(settings)
   }
 }
 
-export default NProgress
+const Progress = new ProgressImpl(DEFAULT_SETTINGS)
+export default Progress

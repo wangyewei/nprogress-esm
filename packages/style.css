@@ -1,12 +1,12 @@
-/* Make clicks pass-through */
 :root {
   --progress-primary-color: #29d;
 }
-#nprogress {
+
+.yev-progress {
   pointer-events: none;
 }
 
-#nprogress .bar {
+.yev-progress .bar {
   background: var(--progress-primary-color);
 
   position: fixed;
@@ -19,7 +19,7 @@
 }
 
 /* Fancy blur effect */
-#nprogress .peg {
+.yev-progress .peg {
   display: block;
   position: absolute;
   right: 0px;
@@ -35,7 +35,7 @@
 }
 
 /* Remove these to get rid of the spinner */
-#nprogress .spinner {
+.yev-progress .spinner {
   display: block;
   position: fixed;
   z-index: 1031;
@@ -43,7 +43,7 @@
   right: 15px;
 }
 
-#nprogress .spinner-icon {
+.yev-progress .spinner-icon {
   width: 18px;
   height: 18px;
   box-sizing: border-box;
@@ -57,13 +57,13 @@
   animation: nprogress-spinner 400ms linear infinite;
 }
 
-.nprogress-custom-parent {
+.yev-progress-custom-parent {
   overflow: hidden;
   position: relative;
 }
 
-.nprogress-custom-parent #nprogress .spinner,
-.nprogress-custom-parent #nprogress .bar {
+.yev-progress-custom-parent .yev-progress .spinner,
+.yev-progress-custom-parent .yev-progress .bar {
   position: absolute;
 }
 
