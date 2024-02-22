@@ -1,29 +1,27 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import NProgress from '../packages'
+import Progress from '../packages'
 import { removeElement, deepClone } from '../packages/utils/basic'
 import { equal } from 'assert'
 import { mockDelay } from './utils'
 import { isHTMLElement } from '../packages/utils/is'
-import type { NProgressSetting } from '../packages/settings'
+import type { ProgressSetting } from '../packages/settings'
 
-
-const getProgress = () => document.getElementById('nprogress')
-const rawSettings: NProgressSetting = deepClone(NProgress.settings)
+const getProgress = () => document.getElementById(Progress.progressId)
+const rawSettings: ProgressSetting = deepClone(Progress.settings)
 describe('n-progress-esm', () => {
-
 
   afterEach(() => {
     const nprogressEle = getProgress()
     if (nprogressEle) removeElement(nprogressEle)
-    NProgress.status = null
-    NProgress.settings = deepClone(rawSettings)
+    Progress.status = null
+    Progress.settings = deepClone(rawSettings)
   })
 
   ////////////////////////// set() //////////////////////////
 
   describe('set', () => {
     it('progress should be rendered while set(0)', () => {
-      NProgress.set(0)
+      Progress.set(0)
       const progressEl = getProgress()
       expect(progressEl).toBeTruthy()
       expect(progressEl?.querySelectorAll('.bar').length).toBe(1)
@@ -32,40 +30,40 @@ describe('n-progress-esm', () => {
     })
 
     it('progress should respect minimum', () => {
-      NProgress.set(0)
-      equal(NProgress.status, NProgress.settings.minimum)
+      Progress.set(0)
+      equal(Progress.status, Progress.settings.minimum)
     })
 
     it('.set(100) should appear and disappear', async () => {
-      NProgress.configure({ speed: 10 })
-      NProgress.set(0)
-      NProgress.set(100)
+      Progress.configure({ speed: 10 })
+      Progress.set(0)
+      Progress.set(100)
       const progressEl = getProgress()
       expect(progressEl).toBeTruthy()
       await mockDelay(600)
-      const parent = isHTMLElement(NProgress.settings.parent)
-        ? NProgress.settings.parent
-        : document.querySelector<HTMLElement>(NProgress.settings.parent)!
+      const parent = isHTMLElement(Progress.settings.parent)
+        ? Progress.settings.parent
+        : document.querySelector<HTMLElement>(Progress.settings.parent)!
       expect(Array.from(parent.classList).includes(('nprogress-custom-parent'))).toBeFalsy()
       expect(parent.querySelectorAll('#nprogress').length).toBe(0)
     })
 
     it('must clamp to minimum', () => {
-      NProgress.set(0)
-      equal(NProgress.status, NProgress.settings.minimum)
+      Progress.set(0)
+      equal(Progress.status, Progress.settings.minimum)
     })
 
     it('must clamp to maximum', function () {
-      NProgress.set(100)
-      equal(NProgress.status, null)
+      Progress.set(100)
+      equal(Progress.status, null)
     })
 
     it('setting.showSpinner is false, spinner should be removed', async () => {
-      NProgress.settings.showSpinner = false
-      NProgress.set(0)
+      Progress.settings.showSpinner = false
+      Progress.set(0)
       await mockDelay(800)
       const spinner = document.querySelector<HTMLElement>(
-        NProgress.settings.spinnerSelector
+        Progress.settings.spinnerSelector
       )
       expect(spinner).toBeNull()
     })
@@ -73,15 +71,15 @@ describe('n-progress-esm', () => {
     it('setting.body is not body, it should be add expected class', async () => {
       const parent = document.createElement('div')
       parent.setAttribute('id', 'parent')
-      NProgress.settings.parent = '#parent'
+      Progress.settings.parent = '#parent'
       document.body.append(parent)
-      NProgress.set(0)
-      expect(parent.classList.contains('nprogress-custom-parent')).toBeTruthy()
+      Progress.set(0)
+      expect(parent.classList.contains('yev-progress-custom-parent')).toBeTruthy()
     })
 
     it('set should bind the correct positionUsing style', () => {
-      NProgress.set(0)
-      expect(['translate3d', 'translate', 'margin'].includes(NProgress.settings.positionUsing)).toBeTruthy()
+      Progress.set(0)
+      expect(['translate3d', 'translate', 'margin'].includes(Progress.settings.positionUsing)).toBeTruthy()
     })
   })
 
@@ -89,7 +87,7 @@ describe('n-progress-esm', () => {
 
   describe('start', () => {
     it('progress should be rendered while start', () => {
-      NProgress.start()
+      Progress.start()
       const progressEl = getProgress()
       expect(progressEl).toBeTruthy()
       expect(progressEl?.querySelectorAll('.bar').length).toBe(1)
@@ -98,21 +96,21 @@ describe('n-progress-esm', () => {
     })
 
     it('progress should respect minimum', () => {
-      NProgress.start()
-      equal(NProgress.status, NProgress.settings.minimum)
+      Progress.start()
+      equal(Progress.status, Progress.settings.minimum)
     })
 
     it('static method trickle should be called', async () => {
-      NProgress.trickle = vi.fn()
-      NProgress.start()
+      Progress.trickle = vi.fn()
+      Progress.start()
       await mockDelay(600)
-      expect(NProgress.trickle).toHaveBeenCalled()
+      expect(Progress.trickle).toHaveBeenCalled()
     })
   })
 
   describe('done', () => {
     it('should be removed from the parent', () => {
-      NProgress.done()
+      Progress.done()
       setTimeout(() => {
         const progressEl = getProgress()
         expect(progressEl).toBeFalsy()
@@ -122,59 +120,71 @@ describe('n-progress-esm', () => {
 
   describe('inc', () => {
     it('should render', function () {
-      NProgress.inc();
+      Progress.inc();
       const progressEl = getProgress()
       expect(progressEl).toBeTruthy()
     });
 
     it('should start with minimum', function () {
-      NProgress.inc()
-      equal(NProgress.status, NProgress.settings.minimum)
+      Progress.inc()
+      equal(Progress.status, Progress.settings.minimum)
     });
 
     it('should increment', function () {
-      NProgress.start()
-      var start = NProgress.status
-      NProgress.inc();
-      expect(NProgress.status! > start!).toBeTruthy()
+      Progress.start()
+      var start = Progress.status
+      Progress.inc();
+      expect(Progress.status! > start!).toBeTruthy()
     })
 
     it('should never reach 100', function () {
-      for (let i = 0; i < 100; ++i) { NProgress.inc() }
-      expect(NProgress.status! < 100).toBeTruthy()
+      for (let i = 0; i < 100; ++i) { Progress.inc() }
+      expect(Progress.status! < 100).toBeTruthy()
     })
 
     it('should not increment if status is greater than 100', () => {
-      const startSpy = vi.fn(NProgress.start)
-      const setSpy = vi.fn(NProgress.set)
+      const startSpy = vi.fn(Progress.start)
+      const setSpy = vi.fn(Progress.set)
 
-      NProgress.status = 110
-      NProgress.inc()
+      Progress.status = 110
+      Progress.inc()
 
       expect(startSpy).not.toHaveBeenCalled()
       expect(setSpy).not.toHaveBeenCalled()
     });
 
     it('should set amount to 0 if status is not in specified ranges', () => {
-      NProgress.start = vi.fn()
-      NProgress.set = vi.fn()
+      Progress.start = vi.fn()
+      Progress.set = vi.fn()
 
-      NProgress.status = -5
-      NProgress.inc('not a number')
+      Progress.status = -5
+      Progress.inc('not a number')
 
-      expect(NProgress.start).not.toHaveBeenCalled()
-      expect(NProgress.set).toHaveBeenCalledWith
+      expect(Progress.start).not.toHaveBeenCalled()
+      expect(Progress.set).toHaveBeenCalledWith
     })
   })
 
   describe('remove', () => {
     it('should be removed from the parent', () => {
-      NProgress.start()
+      Progress.start()
       setTimeout(() => {
-        NProgress.remove()
+        Progress.remove()
         const progressEl = getProgress()
         expect(progressEl).toBeFalsy()
       }, 200)
+    })
+  })
+
+  describe('create', () => {
+    it('create can create a new prgress impl', () => {
+      const childProgress = Progress.create()
+      childProgress.start()
+
+      const childProgressEl = document.getElementById(childProgress.elementId)
+      const mainProgress = getProgress()
+      expect(childProgressEl).toBeTruthy()
+      expect(mainProgress).toBeFalsy()
     })
   })
 })

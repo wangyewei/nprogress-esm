@@ -34,3 +34,19 @@ export const deepClone = <T>(obj: T): T => {
 
   return newObj as T
 }
+
+export const generateUniqueHash = (): string => {
+  const timestamp: number = new Date().getTime()
+  const random: number = Math.random()
+
+  const combinedString: string = timestamp.toString() + random.toString()
+
+  let hash: number = 0
+  for (let i = 0; i < combinedString.length; i++) {
+    const char: number = combinedString.charCodeAt(i)
+    hash = (hash << 5) - hash + char
+    hash |= 0
+  }
+
+  return Math.abs(hash).toString()
+}
