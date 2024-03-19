@@ -25,3 +25,5 @@ rollup.config.ts
 
 pnpm-lock.yaml
 package-lock.json
+
+vitest.config.ts
