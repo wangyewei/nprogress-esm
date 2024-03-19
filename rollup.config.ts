@@ -9,11 +9,11 @@ import json from '@rollup/plugin-json'
 import replace from '@rollup/plugin-replace'
 import alias from '@rollup/plugin-alias'
 import dts from 'rollup-plugin-dts'
-// import { promises as fs } from 'fs'
-const require = createRequire(import.meta.url)
-const pkg = require('./package.json')
-// const DEV = !!process.env.DEV
-// const PROD = !DEV
+import terser from '@rollup/plugin-terser'
+
+const _require = createRequire(import.meta.url)
+const pkg = _require('./package.json')
+
 const ROOT = fileURLToPath(import.meta.url)
 const r = (p: string) => resolve(ROOT, '..', p)
 const external = [...Object.keys(pkg.dependencies)]
@@ -24,7 +24,6 @@ const plugins = [
     },
   }),
   replace({
-    // polyfill broken browser check from bundled deps
     'navigator.userAgentData': 'undefined',
     'navigator.userAgent': 'undefined',
     preventAssignment: true,
@@ -33,6 +32,7 @@ const plugins = [
   nodeResolve({ preferBuiltins: false }),
   esbuild({ target: 'node14' }),
   json(),
+  terser()
 ]
 const esmBuild: RollupOptions = {
   input: r('packages/index.ts'),
@@ -48,21 +48,8 @@ const esmBuild: RollupOptions = {
     if (warning.code !== 'EVAL') warn(warning)
   },
 }
-// const cjsBuild: RollupOptions = {
-//   input: [r('src/node/cli.ts')],
-//   output: {
-//     format: 'cjs',
-//     dir: r('dist/node-cjs'),
-//     entryFileNames: `[name].cjs`,
-//     chunkFileNames: 'serve-[hash].cjs',
-//   },
-//   external,
-//   plugins,
-//   onwarn(warning, warn) {
-//     if (warning.code !== 'EVAL') warn(warning)
-//   },
-// }
-const Typing: RollupOptions = {
+
+const typing: RollupOptions = {
   input: r('packages/index.ts'),
   output: {
     format: 'esm',
@@ -74,6 +61,6 @@ const Typing: RollupOptions = {
 
 const config = defineConfig([])
 config.push(esmBuild)
-config.push(Typing)
+config.push(typing)
 
 export default config
