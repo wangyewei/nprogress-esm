@@ -15,7 +15,7 @@ prettierrc
 .eslintrc 
 
 scripts/
-playground/
+playgrounds/
 packages/
 coverage/
 .github/
