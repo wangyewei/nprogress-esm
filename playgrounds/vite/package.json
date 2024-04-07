@@ -1,0 +1,13 @@
+{
+  "name": "@nprogress-esm/playgrounds-vite",
+  "version": "0.0.0",
+  "author": "Yev Wang",
+  "description": "playgrounds for vite",
+  "scripts": {
+    "play": "vite"
+  },
+  "devDependencies": {
+    "vite": "^5.2.8",
+    "nprogress-esm": "workspace:*"
+  }
+}

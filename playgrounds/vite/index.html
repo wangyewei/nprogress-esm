@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./dist/style.css" />
+    <style>
+      html,
+      body {
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      h1 {
+        font-weight: lighter;
+        font-size: 42px;
+        color: #6d6c6c;
+      }
+
+      h1 span {
+        color: rgba(112, 110, 231);
+      }
+
+      p {
+        color: #6d6c6c;
+        font-size: 18px;
+        margin-bottom: 100px;
+      }
+
+      .commands {
+        max-width: 660px;
+        margin: 0 auto;
+      }
+
+      .command {
+        width: 100%;
+        display: flex;
+        gap: 12px;
+        margin-bottom: 24px;
+        margin-left: 62px;
+      }
+
+      .command button {
+        text-decoration: none;
+        background: #eee;
+        color: #777;
+        border-radius: 2px;
+        padding: 8px 10px;
+        font-weight: 700;
+        text-align: left;
+        border: 1px solid #ccc;
+        padding-left: 12px;
+      }
+      .command button:hover {
+        background: rgba(112, 110, 231, 0.4);
+        color: #fff;
+      }
+      .command button::before {
+        content: '\25b6';
+      }
+
+      .command div {
+        color: #6d6c6c;
+        font-size: 24px;
+      }
+      .command div span {
+        color: rgba(112, 110, 231);
+      }
+
+      footer {
+        color: #777;
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      footer a {
+        color: rgba(112, 110, 231);
+        text-decoration: none;
+      }
+      footer a:hover {
+        text-decoration: underline;
+      }
+    </style>
+    <title>nprogress-esm: esm-friendly nprogress rewrite with typescript</title>
+  </head>
+  <body align="center">
+    <img
+      src="https://private-user-images.githubusercontent.com/49926816/295143172-515442e2-d0fd-4733-a5ab-e903d0066d0e.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDUwNDgwNjEsIm5iZiI6MTcwNTA0Nzc2MSwicGF0aCI6Ii80OTkyNjgxNi8yOTUxNDMxNzItNTE1NDQyZTItZDBmZC00NzMzLWE1YWItZTkwM2QwMDY2ZDBlLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAxMTIlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMTEyVDA4MjI0MVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTYwM2RhZDlmMzNjMzdlZDVkYmYzMTA0ZjlkYWQ0ZWU0OTIyZjExY2YyYzA3MjA5NzhlMmI4YzlmZmMzZmE3MDcmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.F5IfcaLGgCPKTyVRPUX7B0G-Lea5WInuSzmaWXrLaco"
+      alt=""
+    />
+    <h1>NProgress<span>-esm</span></h1>
+    <p>esm-friendly nprogress rewrite with typescript</p>
+
+    <div class="commands">
+      <div class="command">
+        <button id="start"></button>
+        <div>Progress<span>.start()</span> ——</div>
+        <div class="suffix">shows the progress bar</div>
+      </div>
+
+      <div class="command">
+        <button id="set"></button>
+        <div>Progress<span>.set(40)</span> ——</div>
+        <div class="suffix">sets a percentage</div>
+      </div>
+
+      <div class="command">
+        <button id="done"></button>
+        <div>Progress<span>.done()</span> ——</div>
+        <div class="suffix">completes the progress</div>
+      </div>
+
+      <div class="command">
+        <button id="create_child"></button>
+        <div>Progress<span>.create()</span> ——</div>
+        <div class="suffix">completes the progress</div>
+      </div>
+
+      <div class="command">
+        <button id="child_start"></button>
+        <div>ChildProgress<span>.start()</span> ——</div>
+        <div class="suffix">completes the progress</div>
+      </div>
+      <div class="command">
+        <button id="child_done"></button>
+        <div>ChildProgress<span>.done()</span> ——</div>
+        <div class="suffix">completes the progress</div>
+      </div>
+      <footer>
+        MIT License © 2024-Present
+        <a href="https://github.com/wangyewei">Yev Wang</a>
+      </footer>
+    </div>
+
+    <script type="module" src="./index.js"></script>
+  </body>
+</html>

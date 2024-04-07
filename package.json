@@ -30,6 +30,7 @@
   },
   "scripts": {
     "dev": "esno packages",
+    "dev:play-vite": "pnpm -C playgrounds/vite play",
     "build:prepare": "rimraf dist",
     "build:progress": "tsc -p . --noEmit && rollup --config rollup.config.ts --configPlugin esbuild",
     "build:style": "esno scripts/cssMinify.ts",
