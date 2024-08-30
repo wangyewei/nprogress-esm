@@ -1,5 +1,9 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "prettier.singleQuote": true
+  "prettier.singleQuote": true,
+  "cSpell.words": ["bumpp", "esno", "nprogress", "onwarn", "Yewei"],
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  }
 }
