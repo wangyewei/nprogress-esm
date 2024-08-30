@@ -16,7 +16,7 @@ const pkg = _require('./package.json')
 
 const ROOT = fileURLToPath(import.meta.url)
 const r = (p: string) => resolve(ROOT, '..', p)
-const external = [...Object.keys(pkg.dependencies)]
+const external = [...Object.keys(pkg['dependencies'] || {})]
 const plugins = [
   alias({
     entries: {
